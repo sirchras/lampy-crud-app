@@ -18,7 +18,7 @@ def create_number(num_id: int, num_val: str):
     q = f"INSERT INTO numbers VALUES ({num_id}, '{num_val}')"
     curs.execute(q)
     conn.commit()
-    return 'record created' 
+    return 'record created'
 
 @app.get('/numbers/')
 def read_numbers():
