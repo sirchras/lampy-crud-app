@@ -1,0 +1,14 @@
+[Unit]
+Description=Gunicorn instance to serve REST API
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/www/restapi/
+Environment="PATH=/var/www/restapi/venv/bin"
+ExecStart=/var/www/restapi/venv/bin/gunicorn --config gunicorn_config.py main:app
+
+[Install]
+WantedBy=multi-user.target
+
