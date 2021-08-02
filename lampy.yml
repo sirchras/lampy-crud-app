@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  REST API on a LAMPy stack
+
+Resources:
+  WebServerInstance:
+    Type: 'AWS::EC2::Instance'
+    Metadata:
