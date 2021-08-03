@@ -11,18 +11,28 @@ Resources:
         - Key: Name
           Value: lampy-vpc
 
+  WebServerSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: 'ap-southeast-2a'
+      Tags:
+        - Key: Name
+          Value: ws-public-az-a
+
   WebServerSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Allow HTTP traffic
-      VpcId: !Ref VpcId # can i reference a value within a block?
+      VpcId: !Ref VPC
       SecurityGroupIngress:
-        - InProtocol: tcp
+        - IpProtocol: tcp
           FromPort: '80'
           ToPort: '80'
           CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
-        - InProtocol: tcp
+        - IpProtocol: tcp
           FromPort: '3306'
           ToPort: '3306'
           CidrIp: '10.0.0.0/16' # VPC CIDR
