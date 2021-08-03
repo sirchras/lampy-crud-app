@@ -57,7 +57,12 @@ Resources:
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref IGW
-      RouteTableId: !Ref PublicWSRouteTable
+      RouteTableId: !Ref PublicRouteTable
+  PublicSubnetRTAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref WSSubnet
 
   PrivateRouteTable:
     Type: 'AWS::EC2::RouteTable'
@@ -66,6 +71,11 @@ Resources:
       Tags:
         - Key: Name
           Value: private-rt
+  PrivateSubnetRTAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref DBSubnet
 
   PublicWSNACL:
     Type: 'AWS::EC2::NetworkAcl'
@@ -120,6 +130,11 @@ Resources:
       PortRange:
         From: 32768
         To: 65535
+  PublicSubnetNACLAssociation:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      NetworkAclId: !Ref PublicWSNACL
+      SubnetId: !Ref WSSubnet
 
   PrivateDBNACL:
     Type: 'AWS::EC2::NetworkAcl'
@@ -151,6 +166,11 @@ Resources:
       PortRange:
         From: 32768
         To: 65535
+  PrivateSubnetNACLAssociation:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      NetworkAclId: !Ref PrivateDBNACL
+      SubnetId: !Ref DBSubnet
 
   wssg:
     Type: 'AWS::EC2::SecurityGroup'
