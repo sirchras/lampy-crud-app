@@ -11,6 +11,19 @@ Resources:
         - Key: Name
           Value: lampy-vpc
 
+  IGW:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: lampy-igw
+
+  VPC-GW-Attachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref IGW
+
   WSSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
