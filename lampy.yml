@@ -18,7 +18,7 @@ Resources:
         - Key: Name
           Value: lampy-igw
 
-  VPC-GW-Attachment:
+  GatewayToInternet:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
       VpcId: !Ref VPC
@@ -44,7 +44,31 @@ Resources:
         - Key: Name
           Value: db-private-az-a
 
-  WSSecurityGroup:
+  PublicRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: public-rt
+
+  RouteToInternet:
+    Type: 'AWS::EC2::Route'
+    DependsOn: GatewayToInternet
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IGW
+      RouteTableId: !Ref PublicWSRouteTable
+
+  PrivateRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: private-rt
+
+  wssg:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Allow HTTP traffic
@@ -63,7 +87,7 @@ Resources:
         - Key: Name
           Value: ws-sg
 
-  DBSecurityGroup:
+  dbsg:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Allow web servers to access the DB
