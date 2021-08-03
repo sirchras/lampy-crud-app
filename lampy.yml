@@ -11,7 +11,7 @@ Resources:
         - Key: Name
           Value: lampy-vpc
 
-  WebServerSubnet:
+  WSSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
@@ -21,7 +21,17 @@ Resources:
         - Key: Name
           Value: ws-public-az-a
 
-  WebServerSecurityGroup:
+  DBSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: 'ap-southeast-2a'
+      Tags:
+        - Key: Name
+          Value: db-private-az-a
+
+  WSSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Allow HTTP traffic
@@ -36,6 +46,23 @@ Resources:
           FromPort: '3306'
           ToPort: '3306'
           CidrIp: '10.0.0.0/16' # VPC CIDR
+      Tags:
+        - Key: Name
+          Value: ws-sg
+
+  DBSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Allow web servers to access the DB
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          CidrIp: 10.0.0.0/16 # VPC CIDR
+      Tags:
+        - Key: Name
+          Value: db-sg
 
   # WebServerInstance:
   #   Type: 'AWS::EC2::Instance'
