@@ -3,6 +3,14 @@ Description: >-
   REST API on a LAMPy stack
 
 Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: lampy-vpc
+
   WebServerSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
