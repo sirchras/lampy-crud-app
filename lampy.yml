@@ -3,6 +3,34 @@ Description: >-
   REST API on a LAMPy stack
 
 Resources:
-  WebServerInstance:
-    Type: 'AWS::EC2::Instance'
-    Metadata:
+  WebServerSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Allow HTTP traffic
+      VpcId: !Ref VpcId # can i reference a value within a block?
+      SecurityGroupIngress:
+        - InProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - InProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          CidrIp: '10.0.0.0/16' # VPC CIDR
+
+  # WebServerInstance:
+  #   Type: 'AWS::EC2::Instance'
+  #   Metadata:
+  #     'AWS::CloudFormation::Init':
+  #       configSets:
+  #         InstallAndRun:
+  #           - Install
+  #           - Configure
+  #         Install:
+  #           packages:
+  #             yum:
+  #               mysql: []
+  #               mysql-server: []
+  #               mysql-libs: []
+  #               httpd: []
