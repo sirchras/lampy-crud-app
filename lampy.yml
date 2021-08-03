@@ -17,7 +17,6 @@ Resources:
       Tags:
         - Key: Name
           Value: lampy-igw
-
   GatewayToInternet:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
@@ -186,7 +185,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: '3306'
           ToPort: '3306'
-          CidrIp: '10.0.0.0/16' # VPC CIDR
+          CidrIp: 10.0.0.0/16 # VPC CIDR
       Tags:
         - Key: Name
           Value: ws-sg
@@ -197,6 +196,11 @@ Resources:
       GroupDescription: Allow web servers to access the DB
       VpcId: !Ref VPC
       SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          SourceSecurityGroupId: !Ref wssg
+      SecurityGroupEgress:
         - IpProtocol: tcp
           FromPort: '3306'
           ToPort: '3306'
